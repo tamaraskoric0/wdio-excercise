@@ -1,22 +1,51 @@
-describe('Shoutem Pricing page', () => {
-    it('Ucitavanje stranice Pricing', async () => {
-        await browser.url('https://shoutem.com/pricing/');
+describe ('OpenMRS', () => {
+    it ('Login with incorrect credentials', async  () => {
+        browser.url("https://demo.openmrs.org/openmrs/login.htm");
 
-        const h1 = $('h1');
-        await expect(h1).toHaveText('There are more ways to create apps with Shoutem');
+        const usernameInput = await $('#username');
+        const passwordInput = await $('#password');
+        const pharmacyButton = await $('#Pharmacy');
+        const loginButton = await $('#loginButton');
+
+        await usernameInput.addValue('jdfjsk');
+        await passwordInput.addValue('jdks');
+        await pharmacyButton.click();
+        await loginButton.click();
+
+        const errorMessage = await $('#error-message');
+        await expect(errorMessage).toHaveText("Invalid username/password. Please try again.");
+
+
+    }); 
+
+    it ('Login with correct credentials', async () => {
+        browser.url("https://demo.openmrs.org/openmrs/login.htm");
+
+        const usernameInput = await $('#username');
+        const passwordInput = await $('#password');
+        const pharmacyButton = await $('#Pharmacy');
+        const loginButton = await $('#loginButton');
+
+        await usernameInput.addValue('Admin');
+        await passwordInput.addValue('Admin123');
+        await pharmacyButton.click();
+        await loginButton.click();
+
+        const h4 = await $('h4');
+        await expect(h4).toHaveText("Logged in as Super User (admin) at Pharmacy.");
     });
 
-    it('Ucitavanje social landing stranica', async () => {
-        await browser.url('https://shoutem.com/apps/social-network/');
+    it ('Logout', async () => {
+        browser.setWindowSize(1500, 1500);
 
-        const button = await $('.btn=Build now');
-        await button.click();
+        const LogoutButton = await $('a=Logout');
+        await LogoutButton.click();
 
-        const pageTitle = await $('.page-title');
-        await expect(pageTitle).toHaveText('Choose an app template')
+        const Login = await $('.w-auto');
+        await expect(Login).toHaveText("LOGIN");        
+        
 
-
-
-    })
+        
+    });
 
 })
